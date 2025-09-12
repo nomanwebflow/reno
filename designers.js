@@ -379,3 +379,19 @@ designerSwiper.controller.control = designerContentSwiper;
 designerContentSwiper.controller.control = designerIMGSwiper;
 
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const target = document.querySelector(".home_des_track");
+  if (!target) return;
+
+  ScrollTrigger.create({
+    trigger: target,
+    start: "top top",   // when .home_des_track top hits viewport top
+    end: "bottom top",  // until it scrolls out at the top
+    toggleClass: {targets: target, className: "swiper-visible"},
+    markers: false // set to true for debugging
+  });
+});
