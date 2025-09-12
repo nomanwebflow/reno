@@ -1,7 +1,4 @@
 
-
-// Kitchen
-
 document.addEventListener("DOMContentLoaded", () => {
   const instance = document.querySelector('[data-calc-instance="kitchen"]');
 
