@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const zStart = -300; // starting z in dvh
   const zEndBase = 200; // base zEnd in dvh
-  const zOffset = 20; // z offset step in dvh
+  const zOffset = 10; // z offset step in dvh
   const fadeRange = 10; // how many % of viewport to fade in
 
   images.forEach((img, i) => {
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         z: `${zEnd}dvh`,
         scrollTrigger: {
           trigger: ".ctr_all-in-one_track",
-          start: `${startTop}% bottom`,
+          start: `${startTop}% top`,
           end: "bottom top",
           scrub: true,
           stragger: true,
@@ -108,13 +108,15 @@ gsap.fromTo(".ctr_all-in-one_bg", { opacity: 0 }, {
   },
 });
 
-const swiperEl = document.querySelector('.ctr_industory_slider_wrap');
+
+const swiperEl = document.querySelector('.ctr_industory_slider_wrap.swiper');
 const swiper = new Swiper(swiperEl, {
+ 
   grabCursor: true,
   watchSlidesProgress: true,
   loop: true,
-  speed: 800,
-  keyboard: {
+  speed: 400,
+   keyboard: {
     enabled: true,
     onlyInViewport: true,
   },
@@ -125,66 +127,46 @@ const swiper = new Swiper(swiperEl, {
     nextEl: '[data-swiper-button="next"]',
     prevEl: '[data-swiper-button="prev"]',
   },
+  //pagination: {
+   // el: '.swiper-pagination',
+  //},
   autoplay: {
     delay: 4500,
   },
   on: {
+    
     progress(swiper) {
-      const scaleStep = 0.2;
+      const scaleStep = 0.175;
       const zIndexMax = swiper.slides.length;
-
-      for (let i = 0; i < swiper.slides.length; i++) {
+      for (let i = 0; i < swiper.slides.length; i += 1) {
         const slideEl = swiper.slides[i];
-        const slideProgress = slideEl.progress;
+        const slideProgress = swiper.slides[i].progress;
         const absProgress = Math.abs(slideProgress);
-
         let modify = 1;
         if (absProgress > 1) {
           modify = (absProgress - 1) * 0.2 + 1;
+          
+       }
+        const translate = `${slideProgress * modify * 40}%`;
+        const scale = 1 - absProgress * scaleStep;
+        const zIndex = zIndexMax - Math.abs(Math.round(slideProgress));
+        slideEl.style.transform = `translateX(${translate}) scale(${scale})`;
+        slideEl.style.zIndex = zIndex;
+      
+       
+        if (absProgress > 2.9) {
+          slideEl.style.opacity = 0;
+        } else {
+          slideEl.style.opacity = 1;
         }
-
-        const opacityEls = slideEl.querySelectorAll('.cs-card-content');
-
-        // default values
-        let translate = slideProgress * modify * 50;
-        let scale = 1 - absProgress * scaleStep;
-        let zIndex = zIndexMax - Math.abs(Math.round(slideProgress));
-        let opacity = absProgress > 1.9 ? 0 : 1;
-
-        // overrides
-        if (Math.round(slideProgress) === -2) {
-          translate = -120;
-          zIndex = 1;
-          opacity = 1;
-        }
-        if (Math.round(slideProgress) === 2) {
-          translate = 120;
-          zIndex = 1;
-          opacity = 1;
-        }
-
-        // instead of gsap.to(), use gsap.set() for live smooth updates
-        gsap.set(slideEl, {
-          xPercent: translate,
-          scale: scale,
-          opacity: opacity,
-          zIndex: zIndex,
-        });
-
-        gsap.set(opacityEls, {
-          opacity: 1 - absProgress,
-        });
       }
     },
-
+ 
     setTransition(swiper, duration) {
-      // optional: add easing only when swiper animates between slides
-      swiper.slides.forEach((slideEl) => {
-        gsap.to(slideEl, {
-          duration: duration / 1000, // swiper gives ms, gsap wants sec
-          ease: "power2.out",
-        });
-      });
+      for (let i = 0; i < swiper.slides.length; i += 1) {
+        const slideEl = swiper.slides[i];
+        slideEl.style.transitionDuration = `${duration}ms`;
+      }
     },
   },
 });
