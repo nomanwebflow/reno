@@ -171,6 +171,9 @@ const swiper = new Swiper('.ctr_industory_slider_wrap.swiper', {
 const portfolioSwiper = new Swiper('.ctr_porfolio_slider_wrap.swiper', {
 
   grabCursor: true,
+
+  touchRatio: 0.5, // lower = stiffer drag
+  resistanceRatio: 0.85, // closer to 1 = more resistance
   watchSlidesProgress: true,
   loop: true,
   speed: 400,
@@ -199,7 +202,7 @@ const portfolioSwiper = new Swiper('.ctr_porfolio_slider_wrap.swiper', {
         }
       });
     },
-  
+
     progress(portfolioSwiper) {
       const scaleStep = 0.25;
       const zIndexMax = portfolioSwiper.slides.length;
@@ -322,35 +325,35 @@ const init = () => {
 
 document.addEventListener("DOMContentLoaded", init);
 
-  const createScroll01 = () => {
-    const panels = Array.from(document.querySelectorAll(".ctr_trust_blcok"));
+const createScroll01 = () => {
+  const panels = Array.from(document.querySelectorAll(".ctr_trust_blcok"));
 
-    panels.forEach((panel, index) => {
-      const isLast = index === panels.length - 1;
+  panels.forEach((panel, index) => {
+    const isLast = index === panels.length - 1;
 
-      // Skip animation for the last panel
-      if (isLast) return;
+    // Skip animation for the last panel
+    if (isLast) return;
 
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: panel,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      })
-        .to(panel, {
-          filter: "blur(10px)",
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: panel,
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+      },
+    })
+      .to(panel, {
+        filter: "blur(10px)",
         scale: 0.8,
         opacity: 0,
         ease: "none",
       });
-    });
-  };
-
-  document.addEventListener("DOMContentLoaded", () => {
-    createScroll01();
   });
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  createScroll01();
+});
 
 
 
@@ -364,7 +367,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const options = {
       slidesPerView,
       touchRatio: 0.5, // lower = stiffer drag
-    resistanceRatio: 0.85, // closer to 1 = more resistance
+      resistanceRatio: 0.85, // closer to 1 = more resistance
       spaceBetween: parseFloat(getAttr("swiper-spacebetween", "0")),
       centeredSlides: getAttr("swiper-centeredslides") === "true",
       allowTouchMove: swiperEl.hasAttribute("swiper-allowtouch"),
@@ -375,9 +378,9 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       autoplay: getAttr("swiper-autplay") === "true"
         ? {
-            delay: parseInt(getAttr("swiper-autplayduration", "3000")),
-            disableOnInteraction: false,
-          }
+          delay: parseInt(getAttr("swiper-autplayduration", "3000")),
+          disableOnInteraction: false,
+        }
         : false,
     };
 
