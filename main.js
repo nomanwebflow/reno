@@ -329,30 +329,3 @@ const currentYear = new Date().getFullYear();
 yearSpans.forEach(function (span) {
   span.textContent = currentYear;
 });
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll("[swiper-component] .swiper").forEach(swiperEl => {
-    // Collect options from attributes
-    const options = {
-      slidesPerView: swiperEl.getAttribute("swiper-slidesperview") || 1,
-      spaceBetween: parseInt(swiperEl.getAttribute("swiper-spacebetween")) || 0,
-      centeredSlides: swiperEl.getAttribute("swiper-centeredslides") === "true",
-      allowTouchMove: swiperEl.hasAttribute("swiper-allowtouch"),
-      loop: swiperEl.getAttribute("swiper-loop") === "true",
-      speed: parseInt(swiperEl.getAttribute("swiper-speed")) || 300,
-      keyboard: {
-        enabled: swiperEl.getAttribute("swiper-keyboard") === "true",
-      },
-      autoplay: swiperEl.getAttribute("swiper-autplay") === "true"
-        ? {
-            delay: parseInt(swiperEl.getAttribute("swiper-autplayduration")) || 3000,
-            disableOnInteraction: false,
-          }
-        : false,
-    };
-
-    // Init Swiper
-    new Swiper(swiperEl, options);
-  });
-});
