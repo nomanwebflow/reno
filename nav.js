@@ -116,4 +116,8 @@ window.addEventListener("DOMContentLoaded", function () {
   $(".menu_dropdown_link").on("mouseenter mouseleave", function () {
     $(this).siblings(".menu_dropdown_link").toggleClass("low-opacity");
   });
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 3122540a4d9fdfc94a6007a37940ea4c1751fb97
