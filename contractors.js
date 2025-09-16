@@ -182,7 +182,24 @@ const portfolioSwiper = new Swiper('.ctr_porfolio_slider_wrap.swiper', {
   centeredSlides: true,
   slideToClickedSlide: true,
   on: {
+    slideChangeTransitionEnd: function () {
+      // Loop through all slides
+      this.slides.forEach(slide => {
+        const item = slide.querySelector(".portfolio_list_item");
+        const imgList = slide.querySelector(".portfolio_list_img_list");
 
+        if (slide.classList.contains("swiper-slide-active")) {
+          // Remove classes on active slide
+          item?.classList.remove("is-vertical");
+          imgList?.classList.remove("is-horizontal");
+        } else {
+          // Add them back on inactive slides
+          item?.classList.add("is-vertical");
+          imgList?.classList.add("is-horizontal");
+        }
+      });
+    },
+  
     progress(portfolioSwiper) {
       const scaleStep = 0.25;
       const zIndexMax = portfolioSwiper.slides.length;
