@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       autoplay: getAttr("swiper-autplay") === "true"
         ? {
-            delay: parseInt(getAttr("swiper-autplayduration", "3000")),
-            disableOnInteraction: false,
-          }
+          delay: parseInt(getAttr("swiper-autplayduration", "3000")),
+          disableOnInteraction: false,
+        }
         : false,
     };
 
@@ -47,50 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
-window.addEventListener("DOMContentLoaded", function () {
-  const packagesSwiper = new Swiper(".packages_slider_component.swiper", {
-    speed: 1000,
-    slidesPerView: "auto",
-    spaceBetween: 30,
-    touchRatio: 0.5, // lower = stiffer drag
-    resistanceRatio: 0.85, // closer to 1 = more resistance
-    grabCursor: true,
-  });
-
-  const featureSwiper = new Swiper(".home_features_slider.swiper", {
-    speed: 1000,
-    slidesPerView: "auto",
-    spaceBetween: 30,
-    touchRatio: 0.5, // lower = stiffer drag
-    resistanceRatio: 0.85, // closer to 1 = more resistance
-    grabCursor: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false,
-    },
-  });
-
-  // Stop autoplay initially
-  featureSwiper.autoplay.stop();
-
-  // Observe when slider enters viewport
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          featureSwiper.autoplay.start();
-        } else {
-          featureSwiper.autoplay.stop();
-        }
-      });
-    },
-    { threshold: 0.2 } // % of slider visible before autoplay starts
-  );
-
-  const sliderEl = document.querySelector(".home_features_slider.swiper");
-  if (sliderEl) observer.observe(sliderEl);
-});
 
 /**
  * ======================================
@@ -378,4 +334,56 @@ const yearSpans = document.querySelectorAll(".year_span");
 const currentYear = new Date().getFullYear();
 yearSpans.forEach(function (span) {
   span.textContent = currentYear;
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll('[data-process-tabs="section"]').forEach((element) => {
+    if (element.dataset.scriptInitialized) return;
+    element.dataset.scriptInitialized = "true";
+
+    document.querySelectorAll('[data-process-tabs="wrapper"]').forEach(wrapper => {
+      const tabsVisualSwiper = new Swiper(wrapper.querySelector('[swiper-component]'), {
+        slidesPerView: 1,
+        loop: true,
+        speed: 600,
+        allowTouchMove: false,
+        effect: "fade",
+        fadeEffect: {
+          crossFade: true,
+        },
+      });
+
+      const accordions = wrapper.querySelectorAll('[data-process-tabs="accordion"]');
+
+      if (accordions.length > 0) {
+        // Open the first accordion, close others
+        accordions.forEach((acc, i) => {
+          acc.classList.toggle("is-opened", i === 0);
+        });
+        // Go to first slide initially
+        tabsVisualSwiper.slideToLoop(0);
+      }
+
+      accordions.forEach((accordion, index) => {
+        const btn = accordion.querySelector("button");
+        if (!btn) return; // skip if no button
+
+        btn.addEventListener("click", () => {
+          const isOpen = accordion.classList.contains("is-opened");
+
+          // Close all accordions
+          accordions.forEach(acc => acc.classList.remove("is-opened"));
+
+          if (!isOpen) {
+            accordion.classList.add("is-opened");
+
+            // Go to the corresponding slide
+            tabsVisualSwiper.slideToLoop(index);
+          }
+        });
+      });
+    });
+  });
 });
