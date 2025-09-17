@@ -1,3 +1,53 @@
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("[swiper-component] .swiper").forEach(swiperEl => {
+    const getAttr = (name, fallback = null) => swiperEl.getAttribute(name) ?? fallback;
+
+    const slidesPerViewAttr = getAttr("swiper-slidesperview", "1");
+    const slidesPerView = slidesPerViewAttr === "auto" ? "auto" : parseFloat(slidesPerViewAttr);
+
+    const options = {
+      slidesPerView,
+      touchRatio: 0.5, // lower = stiffer drag
+      resistanceRatio: 0.85, // closer to 1 = more resistance
+      spaceBetween: parseFloat(getAttr("swiper-spacebetween", "0")),
+      centeredSlides: getAttr("swiper-centeredslides") === "true",
+      allowTouchMove: swiperEl.hasAttribute("swiper-allowtouch"),
+      loop: getAttr("swiper-loop") === "true",
+      speed: parseInt(getAttr("swiper-speed", "300")),
+      keyboard: {
+        enabled: getAttr("swiper-keyboard") === "true",
+      },
+      autoplay: getAttr("swiper-autplay") === "true"
+        ? {
+            delay: parseInt(getAttr("swiper-autplayduration", "3000")),
+            disableOnInteraction: false,
+          }
+        : false,
+    };
+
+    const swiperInstance = new Swiper(swiperEl, options);
+
+    // Only handle autoplay if it's enabled
+    if (options.autoplay) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              swiperInstance.autoplay.start();
+            } else {
+              swiperInstance.autoplay.stop();
+            }
+          });
+        },
+        { threshold: 0.25 } // 25% of swiper must be visible
+      );
+
+      observer.observe(swiperEl);
+    }
+  });
+});
+
+
 window.addEventListener("DOMContentLoaded", function () {
   const packagesSwiper = new Swiper(".packages_slider_component.swiper", {
     speed: 1000,

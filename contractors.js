@@ -351,36 +351,3 @@ document.addEventListener("DOMContentLoaded", init);
   document.addEventListener("DOMContentLoaded", () => {
     createScroll01();
   });
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll("[swiper-component] .swiper").forEach(swiperEl => {
-    const getAttr = (name, fallback = null) => swiperEl.getAttribute(name) ?? fallback;
-
-    const slidesPerViewAttr = getAttr("swiper-slidesperview", "1");
-    const slidesPerView = slidesPerViewAttr === "auto" ? "auto" : parseFloat(slidesPerViewAttr);
-
-    const options = {
-      slidesPerView,
-      touchRatio: 0.5, // lower = stiffer drag
-    resistanceRatio: 0.85, // closer to 1 = more resistance
-      spaceBetween: parseFloat(getAttr("swiper-spacebetween", "0")),
-      centeredSlides: getAttr("swiper-centeredslides") === "true",
-      allowTouchMove: swiperEl.hasAttribute("swiper-allowtouch"),
-      loop: getAttr("swiper-loop") === "true",
-      speed: parseInt(getAttr("swiper-speed", "300")),
-      keyboard: {
-        enabled: getAttr("swiper-keyboard") === "true",
-      },
-      autoplay: getAttr("swiper-autplay") === "true"
-        ? {
-            delay: parseInt(getAttr("swiper-autplayduration", "3000")),
-            disableOnInteraction: false,
-          }
-        : false,
-    };
-
-    new Swiper(swiperEl, options);
-  });
-});
